@@ -33,7 +33,22 @@ export default function SignPage() {
 
         {/* Signature Input Component */}
         <div className="flex justify-center mb-8">
-        <SignatureInput autoType="John Doe" />
+          <SignatureInput
+            strokeWidth={1}
+            colorScheme="custom"
+            customColors={{
+              background: 'linear-gradient(180deg, rgba(59,130,246,0.08) 0%, rgba(139,92,246,0.04) 100%)',
+              border: 'rgba(59,130,246,0.15)',
+              borderActive: 'rgba(59,130,246,0.4)',
+              text: 'rgba(0, 0, 0, 0.5)',
+              stroke: 'url(#signature-gradient)',
+              placeholder: 'rgba(59,130,246,0.5)',
+              signedBy: 'rgba(59,130,246,0.6)'
+            }}
+            preventLayoutShift={true}
+            fixedHeight={true}
+            autoTypeDelay={1500}
+          />
         </div>
 
         {/* Success message */}
