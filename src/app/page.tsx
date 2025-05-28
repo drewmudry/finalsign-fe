@@ -1,103 +1,476 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { FileText, Shield, Zap, Users, CheckCircle, ArrowRight, Sparkles, Lock, Clock } from "lucide-react"
+import Link from "next/link"
+import { SignatureInput } from "./sign/_components/AnimatedSignatureInput"
+
+interface User {
+  email: string
+}
+
+export default function LandingPage() {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    checkAuthStatus()
+  }, [])
+
+  const checkAuthStatus = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/user", {
+        credentials: "include",
+      })
+      if (response.ok) {
+        const userData = await response.json()
+        setUser(userData)
+      }
+    } catch (error) {
+      console.log("Not authenticated")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleGetStarted = () => {
+    window.location.href = "http://localhost:8080/auth/google"
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <FileText className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              FinalSign
+            </span>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Features
+            </Link>
+            <Link href="#security" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Security
+            </Link>
+            <Link href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Pricing
+            </Link>
+          </nav>
+
+          <div className="flex items-center space-x-4">
+            {loading ? (
+              <div className="w-24 h-9 bg-gray-200 animate-pulse rounded-md"></div>
+            ) : user ? (
+              <Link href="/dashboard">
+                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                  Go to Dashboard
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            ) : (
+              <Button
+                onClick={handleGetStarted}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              >
+                Get Started
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            )}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </header>
+
+      {/* Hero Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto text-center">
+          <Badge variant="secondary" className="mb-6 bg-blue-100 text-blue-700 border-blue-200">
+            <Sparkles className="w-3 h-3 mr-1" />
+            Trusted by 10,000+ businesses
+          </Badge>
+
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent leading-tight">
+            Sign Documents
+            <br />
+            <span className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] text-blue-600">
+              Digitally
+              <svg className="absolute -bottom-2 left-0 w-full h-3" viewBox="0 0 300 12" fill="none">
+                <path d="M2 10C100 2 200 2 298 10" stroke="url(#gradient)" strokeWidth="3" strokeLinecap="round" />
+                <defs>
+                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#3B82F6" />
+                    <stop offset="100%" stopColor="#8B5CF6" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+          </h1>
+
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Streamline your document workflow with secure, legally binding digital signatures. Fast, simple, and trusted
+            by professionals worldwide.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            {user ? (
+              <Link href="/dashboard">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-6"
+                >
+                  Go to Dashboard
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+            ) : (
+              <Button
+                size="lg"
+                onClick={handleGetStarted}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-6"
+              >
+                Get Started Free
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            )}
+            <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2">
+              Watch Demo
+            </Button>
+          </div>
+
+          {/* 4-Step Process Container */}
+          <div className="py-16 px-4 bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-3xl">
+            {/* 4-Step Process with SignatureInput */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+              {/* Step 1: Upload PDFs */}
+              <div className="text-center group flex flex-col">
+                <h2 className="font-bold text-gray-900 mb-2">1. Upload Documents</h2>
+                <div className="flex-1 mx-auto mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl group-hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
+                  <img 
+                    src="/upload_pdfs.svg" 
+                    alt="Upload PDFs" 
+                    className="w-full h-full max-w-[200px] max-h-[200px] object-contain"
+                  />
+                </div>
+              </div>
+
+              {/* Step 2: Add Fields */}
+              <div className="text-center group flex flex-col">
+                <h2 className="font-semibold text-gray-900 mb-2">2. Add Signature Fields</h2>
+                <div className="flex-1 mx-auto mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl group-hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
+                  <img 
+                    src="/add_fields.svg" 
+                    alt="Add Fields" 
+                    className="w-full h-full max-w-[200px] max-h-[200px] object-contain"
+                  />
+                </div>
+              </div>
+
+              {/* Step 3: Sign Documents */}
+              <div className="text-center group flex flex-col">
+                <h2 className="font-semibold text-gray-900 mb-2">3. Sign Digitally</h2>
+                <div className="flex-1 mb-4 flex items-center justify-center">
+                  <SignatureInput 
+                    autoType="Final Sign"
+                    maxWidth="280px"
+                    strokeWidth={1}
+                    colorScheme="custom"
+                    customColors={{
+                      background: 'linear-gradient(180deg, rgba(59,130,246,0.08) 0%, rgba(139,92,246,0.04) 100%)',
+                      border: 'rgba(59,130,246,0.15)',
+                      borderActive: 'rgba(59,130,246,0.4)',
+                      text: 'rgba(0, 0, 0, 0.5)',
+                      stroke: 'url(#signature-gradient)',
+                      placeholder: 'rgba(59,130,246,0.5)',
+                      signedBy: 'rgba(59,130,246,0.6)'
+                    }}
+                    preventLayoutShift={true}
+                    fixedHeight={true}
+                    autoTypeDelay={1500}
+                  />
+                </div>
+              </div>
+
+              {/* Step 4: View Metrics */}
+              <div className="text-center group flex flex-col">
+                <h2 className="font-semibold text-gray-900 mb-2">4. Track Progress</h2>
+                <div className="flex-1 mx-auto mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl group-hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
+                  <img 
+                    src="/view_metrics.svg" 
+                    alt="View Metrics" 
+                    className="w-full h-full max-w-[200px] max-h-[200px] object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      {/* Rest of your sections remain the same... */}
+      {/* Features Section */}
+      <section id="features" className="py-20 px-4 bg-white">
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Why Choose FinalSign?</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Everything you need to manage document signing workflows efficiently and securely.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Zap className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-4">Lightning Fast</h3>
+                <p className="text-gray-600">
+                  Sign documents in seconds, not hours. Our streamlined process gets you from upload to signature in
+                  under 2 minutes.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Shield className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-4">Bank-Level Security</h3>
+                <p className="text-gray-600">
+                  256-bit SSL encryption and compliance with international security standards keep your documents safe.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Users className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-4">Team Collaboration</h3>
+                <p className="text-gray-600">
+                  Invite multiple signers, track progress in real-time, and manage team workflows effortlessly.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Security Section */}
+      <section id="security" className="py-20 px-4 bg-gray-50">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold mb-6">Enterprise-Grade Security</h2>
+              <p className="text-xl text-gray-600 mb-8">
+                Your documents are protected by the same security standards used by banks and government institutions.
+              </p>
+
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Lock className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-2">End-to-End Encryption</h3>
+                    <p className="text-gray-600">
+                      All documents are encrypted in transit and at rest using AES-256 encryption.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-2">Audit Trail</h3>
+                    <p className="text-gray-600">
+                      Complete signing history with timestamps and IP addresses for legal compliance.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-2">Tamper Detection</h3>
+                    <p className="text-gray-600">
+                      Advanced algorithms detect any unauthorized changes to signed documents.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="bg-white rounded-2xl shadow-2xl p-8">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Shield className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold">Security Certificate</h3>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                    <span className="text-sm font-medium">SSL Certificate</span>
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                    <span className="text-sm font-medium">SOC 2 Compliant</span>
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                    <span className="text-sm font-medium">GDPR Ready</span>
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div className="container mx-auto text-center">
+          <h2 className="text-4xl font-bold text-white mb-6">Ready to Transform Your Document Workflow?</h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Join thousands of businesses already using FinalSign to streamline their document signing process.
+          </p>
+
+          {user ? (
+            <Link href="/dashboard">
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6">
+                Go to Dashboard
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              size="lg"
+              onClick={handleGetStarted}
+              className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6"
+            >
+              Start Signing Today
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          )}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 px-4">
+        <div className="container mx-auto">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-bold">FinalSign</span>
+              </div>
+              <p className="text-gray-400">The most trusted digital signature platform for modern businesses.</p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Product</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    Security
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    Integrations
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    API
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Company</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    Blog
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    Careers
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    Contact
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Support</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    Help Center
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    Documentation
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    Status
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="hover:text-white transition-colors">
+                    Privacy
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 FinalSign. All rights reserved.</p>
+          </div>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
