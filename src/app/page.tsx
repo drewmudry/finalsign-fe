@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { FileText, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { SignatureInput } from "./sign/_components/AnimatedSignatureInput"
@@ -14,7 +15,10 @@ interface User {
 
 export default function LandingPage() {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null)
 
   useEffect(() => {
     checkAuthStatus()
@@ -32,13 +36,36 @@ export default function LandingPage() {
     } catch (error) {
       console.log("Not authenticated")
       console.log(error)
-    } finally {
-      setLoading(false)
-    }
+    } 
   }
 
+  const handleWaitlistSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setSubmitMessage(null)
 
+    try {
+      const response = await fetch(`${API_BASE_URL}/waitlist`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, phone }),
+      })
 
+      if (response.ok) {
+        setSubmitMessage("Successfully joined the waitlist!")
+        setName("")
+        setEmail("")
+        setPhone("")
+      } else {
+        const errorData = await response.json()
+        setSubmitMessage(errorData.message || "Failed to join the waitlist. Please try again.")
+      }
+    } catch (error) {
+      console.error("Waitlist submission error:", error)
+      setSubmitMessage("An unexpected error occurred. Please try again.")
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -187,13 +214,44 @@ export default function LandingPage() {
               </Button>
             </Link>
           ) : (
-            <Button
-              size="lg"
-              className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6"
-            >
-              Start Signing Today
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
+            <form onSubmit={handleWaitlistSubmit} className="max-w-md mx-auto space-y-4">
+              <Input
+                type="text"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="bg-transparent border-white/50 placeholder:text-white/70 text-white focus:ring-white/80 focus:border-white/80"
+              />
+              <Input
+                type="email"
+                placeholder="Your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-transparent border-white/50 placeholder:text-white/70 text-white focus:ring-white/80 focus:border-white/80"
+              />
+              <Input
+                type="tel"
+                placeholder="Your Phone (Optional)"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="bg-transparent border-white/50 placeholder:text-white/70 text-white focus:ring-white/80 focus:border-white/80"
+              />
+              <Button
+                type="submit"
+                size="lg"
+                className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6 w-full"
+              >
+                Join Waitlist
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              {submitMessage && (
+                <p className={`mt-4 text-sm ${submitMessage.startsWith("Successfully") ? "text-green-200" : "text-red-200"}`}>
+                  {submitMessage}
+                </p>
+              )}
+            </form>
           )}
         </div>
       </section>
