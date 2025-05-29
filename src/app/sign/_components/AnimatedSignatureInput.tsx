@@ -103,7 +103,6 @@ export function SignatureInput({
       
       const typeNextCharacter = () => {
         if (currentIndex < autoType.length) {
-          const nextChar = autoType[currentIndex]
           const newValue = autoType.slice(0, currentIndex + 1)
           
           setInputValue(newValue)

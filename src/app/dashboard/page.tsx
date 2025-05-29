@@ -8,6 +8,8 @@ import { FileText, Plus, Download, Eye, MoreHorizontal, User, LogOut, Settings, 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+
 interface DashboardData {
   email: string
 }
@@ -23,7 +25,7 @@ export default function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/dashboard", {
+      const response = await fetch(`${API_BASE_URL}/dashboard`, {
         credentials: "include",
       })
 
@@ -44,7 +46,7 @@ export default function Dashboard() {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:8080/logout", {
+      await fetch(`${API_BASE_URL}/logout`, {
         credentials: "include",
       })
       window.location.href = "/"

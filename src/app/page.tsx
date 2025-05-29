@@ -8,6 +8,8 @@ import { FileText, Shield, Zap, Users, CheckCircle, ArrowRight, Sparkles, Lock, 
 import Link from "next/link"
 import { SignatureInput } from "./sign/_components/AnimatedSignatureInput"
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+
 interface User {
   email: string
 }
@@ -22,7 +24,7 @@ export default function LandingPage() {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch("http://localhost:8080/user", {
+      const response = await fetch(`${API_BASE_URL}/user`, {
         credentials: "include",
       })
       if (response.ok) {
@@ -31,13 +33,14 @@ export default function LandingPage() {
       }
     } catch (error) {
       console.log("Not authenticated")
+      console.log(error)
     } finally {
       setLoading(false)
     }
   }
 
   const handleGetStarted = () => {
-    window.location.href = "http://localhost:8080/auth/google"
+    window.location.href = `${API_BASE_URL}/auth/google`
   }
 
   return (
@@ -90,13 +93,8 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-4">
+      <section className="py-10 px-4">
         <div className="container mx-auto text-center">
-          <Badge variant="secondary" className="mb-6 bg-blue-100 text-blue-700 border-blue-200">
-            <Sparkles className="w-3 h-3 mr-1" />
-            Trusted by 10,000+ businesses
-          </Badge>
-
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent leading-tight">
             Sign Documents
             <br />
@@ -120,28 +118,12 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            {user ? (
-              <Link href="/dashboard">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-6"
-                >
-                  Go to Dashboard
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            ) : (
-              <Button
-                size="lg"
-                onClick={handleGetStarted}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-6"
-              >
-                Get Started Free
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            )}
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2">
-              Watch Demo
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-6"
+            >
+              Join the Waitlist
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
 
@@ -215,135 +197,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Rest of your sections remain the same... */}
-      {/* Features Section */}
-      <section id="features" className="py-20 px-4 bg-white">
-        <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Why Choose FinalSign?</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Everything you need to manage document signing workflows efficiently and securely.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Zap className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-4">Lightning Fast</h3>
-                <p className="text-gray-600">
-                  Sign documents in seconds, not hours. Our streamlined process gets you from upload to signature in
-                  under 2 minutes.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Shield className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-4">Bank-Level Security</h3>
-                <p className="text-gray-600">
-                  256-bit SSL encryption and compliance with international security standards keep your documents safe.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Users className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-4">Team Collaboration</h3>
-                <p className="text-gray-600">
-                  Invite multiple signers, track progress in real-time, and manage team workflows effortlessly.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Security Section */}
-      <section id="security" className="py-20 px-4 bg-gray-50">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold mb-6">Enterprise-Grade Security</h2>
-              <p className="text-xl text-gray-600 mb-8">
-                Your documents are protected by the same security standards used by banks and government institutions.
-              </p>
-
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Lock className="w-4 h-4 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2">End-to-End Encryption</h3>
-                    <p className="text-gray-600">
-                      All documents are encrypted in transit and at rest using AES-256 encryption.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Audit Trail</h3>
-                    <p className="text-gray-600">
-                      Complete signing history with timestamps and IP addresses for legal compliance.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-4 h-4 text-purple-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Tamper Detection</h3>
-                    <p className="text-gray-600">
-                      Advanced algorithms detect any unauthorized changes to signed documents.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-8">
-                <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Shield className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold">Security Certificate</h3>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                    <span className="text-sm font-medium">SSL Certificate</span>
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                    <span className="text-sm font-medium">SOC 2 Compliant</span>
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                    <span className="text-sm font-medium">GDPR Ready</span>
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-purple-600">
