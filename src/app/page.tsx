@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { FileText, Shield, Zap, Users, CheckCircle, ArrowRight, Sparkles, Lock, Clock } from "lucide-react"
+
+import { FileText, ArrowRight} from "lucide-react"
 import Link from "next/link"
 import { SignatureInput } from "./sign/_components/AnimatedSignatureInput"
 
