@@ -42,9 +42,9 @@ export function SignatureInput({
   customColors,
   preventLayoutShift = false,
   fixedHeight = false,
-  maxWidth, 
+  maxWidth,
   strokeWidth = 1,
-  
+
 }: SignatureInputProps) {
   const [isActive, setIsActive] = useState(preventLayoutShift)
   const [inputValue, setInputValue] = useState("")
@@ -64,7 +64,7 @@ export function SignatureInput({
   // Color scheme settings
   const getColors = () => {
     if (customColors) return customColors
-    
+
     switch (colorScheme) {
       case 'gradient':
         return {
@@ -100,21 +100,21 @@ export function SignatureInput({
     const startAutoType = () => {
       setIsAutoTyping(true)
       let currentIndex = 0
-      
+
       const typeNextCharacter = () => {
         if (currentIndex < autoType.length) {
           const newValue = autoType.slice(0, currentIndex + 1)
-          
+
           setInputValue(newValue)
           if (!preventLayoutShift) {
             setIsActive(true)
           }
-          
+
           // Update the input field value
           if (nameInputRef.current) {
             nameInputRef.current.value = newValue
           }
-          
+
           // Redraw signature with animation for the new character
           if (signatureRef.current) {
             signatureRef.current.innerHTML = ""
@@ -124,9 +124,9 @@ export function SignatureInput({
               draw(letter, enableAnimation && isLastLetter)
             })
           }
-          
+
           currentIndex++
-          
+
           // Use animation speed setting
           const delay = Math.random() * (speeds.typing * 0.7) + speeds.typing
           setTimeout(typeNextCharacter, delay)
@@ -137,7 +137,7 @@ export function SignatureInput({
           }
         }
       }
-      
+
       setTimeout(typeNextCharacter, autoTypeDelay)
     }
 
@@ -146,13 +146,13 @@ export function SignatureInput({
 
   const handleInput = (event: React.FormEvent<HTMLInputElement>) => {
     if (isAutoTyping) return
-    
+
     const value = (event.target as HTMLInputElement).value
     setInputValue(value)
     if (!preventLayoutShift) {
       setIsActive(!!value)
     }
-    
+
     if (signatureRef.current) {
       signatureRef.current.innerHTML = ""
       const letters = value.split("")
@@ -164,14 +164,14 @@ export function SignatureInput({
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (isAutoTyping) return
-    
+
     if (event.code === `Key${event.key.toUpperCase()}` || event.code === "Space") {
       setTimeout(() => {
         if (signatureRef.current) {
           const currentValue = nameInputRef.current?.value || ""
           signatureRef.current.innerHTML = ""
           const letters = currentValue.split("")
-          
+
           letters.forEach((letter, index) => {
             const isLastLetter = index === letters.length - 1
             draw(letter, enableAnimation && isLastLetter)
@@ -215,7 +215,7 @@ export function SignatureInput({
           if (path) {
             const pathLength = path.getTotalLength()
             path.style.strokeDasharray = pathLength.toString()
-            
+
             if (animate && enableAnimation) {
               path.style.strokeDashoffset = pathLength.toString()
               setTimeout(() => {
@@ -379,7 +379,7 @@ export function SignatureInput({
       "up-x": "0 -11px 0 -13px",
       "up-y": "0 -12px 0 2px",
       "up-z": "0 -9px 0 -8px",
-      
+
       // Lowercase margins
       "lo-a": "0 -4px 0 0",
       "lo-b": "0 -6px 0 -1.5px",
@@ -408,10 +408,10 @@ export function SignatureInput({
       "lo-y": "0 -4px 0 -9px",
       "lo-z": "0 -4px 0 -10px"
     };
-  
+
     const key = isUppercase ? `up-${letter}` : `lo-${letter}`;
     const margin = margins[key];
-    
+
     if (margin) {
       element.style.margin = margin;
     }
@@ -430,7 +430,7 @@ export function SignatureInput({
           </defs>
         </svg>
       )}
-  
+
       <div className={`signature-modal ${isActive ? "active" : ""} ${className}`}>
         <div className="field-wrapper">
           <input
@@ -446,33 +446,15 @@ export function SignatureInput({
             value={inputValue}
             readOnly={isAutoTyping}
           />
-          {/* Cursor Icon */}
-          {!isAutoTyping && !inputValue && (
-            <div className="cursor-icon">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                <path d="m15 5 4 4" />
-              </svg>
-            </div>
-          )}
         </div>
-  
+
         {(isActive || preventLayoutShift) && (
           <div className={`signature ${!isActive && preventLayoutShift ? 'hidden' : ''}`}>
             <div className="signature-main" ref={signatureRef}></div>
             <div className="signed-by">Signed by, {inputValue}</div>
           </div>
         )}
-  
+
         <style jsx>{`
           .signature-modal {
             position: relative;

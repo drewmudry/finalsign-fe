@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-
-import { FileText, ArrowRight} from "lucide-react"
+import { FileText, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { SignatureInput } from "./sign/_components/AnimatedSignatureInput"
 
@@ -38,9 +37,8 @@ export default function LandingPage() {
     }
   }
 
-  const handleGetStarted = () => {
-    window.location.href = `${API_BASE_URL}/auth/google`
-  }
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -56,37 +54,12 @@ export default function LandingPage() {
             </span>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Features
-            </Link>
-            <Link href="#security" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Security
-            </Link>
-            <Link href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Pricing
-            </Link>
-          </nav>
-
           <div className="flex items-center space-x-4">
-            {loading ? (
-              <div className="w-24 h-9 bg-gray-200 animate-pulse rounded-md"></div>
-            ) : user ? (
-              <Link href="/dashboard">
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                  Go to Dashboard
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            ) : (
-              <Button
-                onClick={handleGetStarted}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-              >
-                Get Started
-                <ArrowRight className="w-4 h-4 ml-2" />
+            <Link href="#waitlist">
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                Join the Waitlist
               </Button>
-            )}
+            </Link>
           </div>
         </div>
       </header>
@@ -117,13 +90,14 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-6"
-            >
-              Join the Waitlist
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
+            <Link href="#waitlist">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-6"
+              >
+                Join the Waitlist
+              </Button>
+            </Link>
           </div>
 
           {/* 4-Step Process Container */}
@@ -134,9 +108,9 @@ export default function LandingPage() {
               <div className="text-center group flex flex-col">
                 <h2 className="font-bold text-gray-900 mb-2">1. Upload Documents</h2>
                 <div className="flex-1 mx-auto mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl group-hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
-                  <img 
-                    src="/upload_pdfs.svg" 
-                    alt="Upload PDFs" 
+                  <img
+                    src="/upload_pdfs.svg"
+                    alt="Upload PDFs"
                     className="w-full h-full max-w-[200px] max-h-[200px] object-contain"
                   />
                 </div>
@@ -146,9 +120,9 @@ export default function LandingPage() {
               <div className="text-center group flex flex-col">
                 <h2 className="font-semibold text-gray-900 mb-2">2. Add Signature Fields</h2>
                 <div className="flex-1 mx-auto mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl group-hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
-                  <img 
-                    src="/add_fields.svg" 
-                    alt="Add Fields" 
+                  <img
+                    src="/add_fields.svg"
+                    alt="Add Fields"
                     className="w-full h-full max-w-[200px] max-h-[200px] object-contain"
                   />
                 </div>
@@ -156,9 +130,9 @@ export default function LandingPage() {
 
               {/* Step 3: Sign Documents */}
               <div className="text-center group flex flex-col">
-                <h2 className="font-semibold text-gray-900 mb-2">3. Sign Digitally</h2>
+                <h2 className="font-semibold text-gray-900 mb-2">3. Recipients Sign Digitally</h2>
                 <div className="flex-1 mb-4 flex items-center justify-center">
-                  <SignatureInput 
+                  <SignatureInput
                     autoType="Final Sign"
                     maxWidth="280px"
                     strokeWidth={1}
@@ -183,16 +157,16 @@ export default function LandingPage() {
               <div className="text-center group flex flex-col">
                 <h2 className="font-semibold text-gray-900 mb-2">4. Track Progress</h2>
                 <div className="flex-1 mx-auto mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl group-hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
-                  <img 
-                    src="/view_metrics.svg" 
-                    alt="View Metrics" 
+                  <img
+                    src="/view_metrics.svg"
+                    alt="View Metrics"
                     className="w-full h-full max-w-[200px] max-h-[200px] object-contain"
                   />
                 </div>
               </div>
             </div>
           </div>
-          
+
         </div>
       </section>
 
@@ -215,7 +189,6 @@ export default function LandingPage() {
           ) : (
             <Button
               size="lg"
-              onClick={handleGetStarted}
               className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6"
             >
               Start Signing Today
@@ -237,84 +210,6 @@ export default function LandingPage() {
                 <span className="text-xl font-bold">FinalSign</span>
               </div>
               <p className="text-gray-400">The most trusted digital signature platform for modern businesses.</p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Features
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Security
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Integrations
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    API
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Help Center
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Documentation
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Status
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Privacy
-                  </Link>
-                </li>
-              </ul>
             </div>
           </div>
 
