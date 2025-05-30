@@ -10,15 +10,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080"
 
-interface User {
-  email: string
-}
 
-interface CTAProps {
-  user: User | null
-}
 
-export function CTA({ user }: CTAProps) {
+
+
+export function CTA() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
@@ -67,7 +63,7 @@ export function CTA({ user }: CTAProps) {
   }
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 relative overflow-hidden">
+    <section id="waitlist" className="py-20 px-4 bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-black/10" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -77,23 +73,7 @@ export function CTA({ user }: CTAProps) {
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
             Ready to Transform Your Document Workflow?
           </h2>
-          {user ? (
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-white/90 text-sm">
-                <CheckCircle className="w-4 h-4 text-green-400" />
-                Welcome back! Ready to continue?
-              </div>
-              <Link href="/dashboard">
-                <Button
-                  size="lg"
-                  className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4 h-auto font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-                >
-                  Go to Dashboard
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          ) : (
+          
             <div className="max-w-md mx-auto">
               {isSuccess ? (
                 <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
@@ -183,7 +163,6 @@ export function CTA({ user }: CTAProps) {
                 </Card>
               )}
             </div>
-          )}
         </div>
       </div>
     </section>
