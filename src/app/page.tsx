@@ -1,6 +1,6 @@
-import { Hero } from "./components/landingPage/hero"
-import { CTA } from "./components/landingPage/CTA"
-import Header from "./components/landingPage/Header"
+import { Hero } from "./_components/landingPage/hero"
+import { CTA } from "./_components/landingPage/CTA"
+import { LPHeader } from "./_components/landingPage/LPHeader"
 
 
 export default async function LandingPage() {
@@ -8,7 +8,7 @@ export default async function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
-      <Header />
+      <LPHeader />
       <Hero />
       <CTA />
 
