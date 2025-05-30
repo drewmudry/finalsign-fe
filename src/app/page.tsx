@@ -1,11 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { FileText, ArrowRight } from "lucide-react"
-import Link from "next/link"
-import { SignatureInput } from "./sign/_components/AnimatedSignatureInput"
+import { Hero } from "./components/landingPage/hero"
+import { CTA } from "./components/landingPage/CTA"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
@@ -15,10 +12,6 @@ interface User {
 
 export default function LandingPage() {
   const [user, setUser] = useState<User | null>(null)
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("")
-  const [submitMessage, setSubmitMessage] = useState<string | null>(null)
 
   useEffect(() => {
     checkAuthStatus()
@@ -39,242 +32,21 @@ export default function LandingPage() {
     } 
   }
 
-  const handleWaitlistSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setSubmitMessage(null)
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/waitlist`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, phone }),
-      })
-
-      if (response.ok) {
-        setSubmitMessage("Successfully joined the waitlist!")
-        setName("")
-        setEmail("")
-        setPhone("")
-      } else {
-        const errorData = await response.json()
-        setSubmitMessage(errorData.message || "Failed to join the waitlist. Please try again.")
-      }
-    } catch (error) {
-      console.error("Waitlist submission error:", error)
-      setSubmitMessage("An unexpected error occurred. Please try again.")
-    }
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <FileText className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              FinalSign
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <Link href="#waitlist">
-              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                Join the Waitlist
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <header />
 
       {/* Hero Section */}
-      <section className="py-10 px-4">
-        <div className="container mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent leading-tight">
-            Sign Documents
-            <br />
-            <span className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] text-blue-600">
-              Digitally
-              <svg className="absolute -bottom-2 left-0 w-full h-3" viewBox="0 0 300 12" fill="none">
-                <path d="M2 10C100 2 200 2 298 10" stroke="url(#gradient)" strokeWidth="3" strokeLinecap="round" />
-                <defs>
-                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#3B82F6" />
-                    <stop offset="100%" stopColor="#8B5CF6" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </span>
-          </h1>
-
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Streamline your document workflow with secure, legally binding digital signatures. Fast, simple, and trusted
-            by professionals worldwide.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link href="#waitlist">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-6"
-              >
-                Join the Waitlist
-              </Button>
-            </Link>
-          </div>
-
-          {/* 4-Step Process Container */}
-          <div className="py-16 px-4 bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-3xl">
-            {/* 4-Step Process with SignatureInput */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-              {/* Step 1: Upload PDFs */}
-              <div className="text-center group flex flex-col">
-                <h2 className="font-bold text-gray-900 mb-2">1. Upload Documents</h2>
-                <div className="flex-1 mx-auto mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl group-hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
-                  <img
-                    src="/upload_pdfs.svg"
-                    alt="Upload PDFs"
-                    className="w-full h-full max-w-[200px] max-h-[200px] object-contain"
-                  />
-                </div>
-              </div>
-
-              {/* Step 2: Add Fields */}
-              <div className="text-center group flex flex-col">
-                <h2 className="font-semibold text-gray-900 mb-2">2. Add Signature Fields</h2>
-                <div className="flex-1 mx-auto mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl group-hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
-                  <img
-                    src="/add_fields.svg"
-                    alt="Add Fields"
-                    className="w-full h-full max-w-[200px] max-h-[200px] object-contain"
-                  />
-                </div>
-              </div>
-
-              {/* Step 3: Sign Documents */}
-              <div className="text-center group flex flex-col">
-                <h2 className="font-semibold text-gray-900 mb-2">3. Recipients Sign Digitally</h2>
-                <div className="flex-1 mb-4 flex items-center justify-center">
-                  <SignatureInput
-                    autoType="Final Sign"
-                    maxWidth="280px"
-                    strokeWidth={1}
-                    colorScheme="custom"
-                    customColors={{
-                      background: 'linear-gradient(180deg, rgba(59,130,246,0.08) 0%, rgba(139,92,246,0.04) 100%)',
-                      border: 'rgba(59,130,246,0.15)',
-                      borderActive: 'rgba(59,130,246,0.4)',
-                      text: 'rgba(0, 0, 0, 0.5)',
-                      stroke: 'url(#signature-gradient)',
-                      placeholder: 'rgba(59,130,246,0.5)',
-                      signedBy: 'rgba(59,130,246,0.6)'
-                    }}
-                    preventLayoutShift={true}
-                    fixedHeight={true}
-                    autoTypeDelay={1500}
-                  />
-                </div>
-              </div>
-
-              {/* Step 4: View Metrics */}
-              <div className="text-center group flex flex-col">
-                <h2 className="font-semibold text-gray-900 mb-2">4. Track Progress</h2>
-                <div className="flex-1 mx-auto mb-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl group-hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
-                  <img
-                    src="/view_metrics.svg"
-                    alt="View Metrics"
-                    className="w-full h-full max-w-[200px] max-h-[200px] object-contain"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
+      <Hero />
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div className="container mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">Ready to Transform Your Document Workflow?</h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of businesses already using FinalSign to streamline their document signing process.
-          </p>
-
-          {user ? (
-            <Link href="/dashboard">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6">
-                Go to Dashboard
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-          ) : (
-            <form onSubmit={handleWaitlistSubmit} className="max-w-md mx-auto space-y-4">
-              <Input
-                type="text"
-                placeholder="Your Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="bg-transparent border-white/50 placeholder:text-white/70 text-white focus:ring-white/80 focus:border-white/80"
-              />
-              <Input
-                type="email"
-                placeholder="Your Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="bg-transparent border-white/50 placeholder:text-white/70 text-white focus:ring-white/80 focus:border-white/80"
-              />
-              <Input
-                type="tel"
-                placeholder="Your Phone (Optional)"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="bg-transparent border-white/50 placeholder:text-white/70 text-white focus:ring-white/80 focus:border-white/80"
-              />
-              <Button
-                type="submit"
-                size="lg"
-                className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6 w-full"
-              >
-                Join Waitlist
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-              {submitMessage && (
-                <p className={`mt-4 text-sm ${submitMessage.startsWith("Successfully") ? "text-green-200" : "text-red-200"}`}>
-                  {submitMessage}
-                </p>
-              )}
-            </form>
-          )}
-        </div>
-      </section>
+      <CTA user={user} />
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12 px-4">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold">FinalSign</span>
-              </div>
-              <p className="text-gray-400">The most trusted digital signature platform for modern businesses.</p>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 FinalSign. All rights reserved.</p>
-          </div>
-        </div>
+        <p className="text-center text-gray-300">&copy; 2025 FinalSign. All rights reserved.</p>
       </footer>
     </div>
   )
