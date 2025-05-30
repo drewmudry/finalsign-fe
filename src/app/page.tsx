@@ -1,6 +1,6 @@
 import { Hero } from "./components/landingPage/hero"
 import { CTA } from "./components/landingPage/CTA"
-import Header from "./components/landingPage/header"
+import Header from "./components/landingPage/Header"
 
 
 export default async function LandingPage() {
@@ -10,7 +10,7 @@ export default async function LandingPage() {
       {/* Header */}
       <Header />
       <Hero />
-      <CTA id="waitlist"/>
+      <CTA />
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12 px-4">
