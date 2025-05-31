@@ -25,19 +25,19 @@ export default function LoginPage() {
           <div className="flex justify-between items-center py-4">
             <Link
               href="/"
-              className="flex items-center text-sage hover:text-sage/80 transition-colors"
+              className="flex items-center text-sage hover:text-accent-orange transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               <span className="font-medium">Back to home</span>
             </Link>
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-sage rounded-lg flex items-center justify-center">
+            <Link href="/" className="flex items-center group">
+              <div className="w-8 h-8 bg-gradient-to-br from-sage to-accent-orange rounded-lg flex items-center justify-center group-hover:shadow-lg transition-all duration-200">
                 <Zap className="w-5 h-5 text-cream" />
               </div>
-              <span className="ml-2 text-xl font-semibold text-sage">
+              <span className="ml-2 text-xl font-semibold text-sage group-hover:text-accent-orange transition-colors">
                 Nexus
               </span>
-            </div>
+            </Link>
           </div>
         </div>
       </header>
@@ -45,9 +45,9 @@ export default function LoginPage() {
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
         <div className="w-full max-w-md">
-          <Card className="bg-white border-sage/10 shadow-xl">
+          <Card className="bg-white border-sage/10 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-l-4 border-l-accent-orange/20">
             <CardHeader className="text-center">
-              <div className="w-12 h-12 bg-sage rounded-xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-sage to-accent-orange rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Zap className="w-6 h-6 text-cream" />
               </div>
               <CardTitle className="text-2xl font-bold text-sage">
@@ -61,7 +61,7 @@ export default function LoginPage() {
               {/* Google Sign In Button */}
               <Button
                 onClick={handleGoogleLogin}
-                className="w-full bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 shadow-sm py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-3"
+                className="w-full bg-white hover:bg-gradient-to-r hover:from-gray-50 hover:to-accent-orange/5 text-gray-900 border border-gray-300 hover:border-accent-orange/30 shadow-sm py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-3"
                 variant="outline"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -91,14 +91,14 @@ export default function LoginPage() {
                   By signing in, you agree to our{" "}
                   <Link
                     href="/terms"
-                    className="text-sage hover:text-sage/80 underline"
+                    className="text-sage hover:text-accent-orange underline transition-colors"
                   >
                     Terms of Service
                   </Link>{" "}
                   and{" "}
                   <Link
                     href="/privacy"
-                    className="text-sage hover:text-sage/80 underline"
+                    className="text-sage hover:text-accent-orange underline transition-colors"
                   >
                     Privacy Policy
                   </Link>
@@ -113,7 +113,7 @@ export default function LoginPage() {
               Need help?{" "}
               <Link
                 href="/support"
-                className="text-sage hover:text-sage/80 font-medium"
+                className="text-sage hover:text-accent-orange font-medium transition-colors"
               >
                 Contact support
               </Link>
