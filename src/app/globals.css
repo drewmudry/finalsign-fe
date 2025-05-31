@@ -120,3 +120,13 @@
     @apply bg-background text-foreground;
   }
 }
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-cream: #faf5ee;
+  --color-sage: #1d503a;
+  --color-sidebar-ring: var(--sidebar-ring);
+  /* ... rest of your existing colors */
+}
