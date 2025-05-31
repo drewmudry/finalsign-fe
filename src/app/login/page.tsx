@@ -13,8 +13,9 @@ import Link from "next/link";
 
 export default function LoginPage() {
   const handleGoogleLogin = () => {
-    // Replace this URL with your actual Go API Google OAuth endpoint
-    window.location.href = "/api/auth/google";
+    // Use your API URL from environment variable
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+    window.location.href = `${apiUrl}/auth/google`;
   };
 
   return (
