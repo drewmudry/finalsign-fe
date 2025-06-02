@@ -735,9 +735,17 @@ export default function WorkspaceSettingsPage() {
                         <TableRow key={member.id}>
                           <TableCell>
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sage to-accent-orange flex items-center justify-center text-cream text-sm font-medium">
-                                {member.name.charAt(0).toUpperCase()}
-                              </div>
+                              {member.avatar_url ? (
+                                <img
+                                  src={member.avatar_url}
+                                  alt={member.name}
+                                  className="w-8 h-8 rounded-full"
+                                />
+                              ) : (
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sage to-accent-orange flex items-center justify-center text-cream text-sm font-medium">
+                                  {member.name.charAt(0).toUpperCase()}
+                                </div>
+                              )}
                               <div>
                                 <div className="font-medium">{member.name}</div>
                                 <div className="text-sm text-gray-500">
