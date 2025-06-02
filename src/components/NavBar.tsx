@@ -26,10 +26,39 @@ import {
 import Link from "next/link";
 import { useWorkspace } from "@/contexts/WorkspaceContext";
 import NotificationDropdown from "@/components/NotificationDropdown";
+import { useEffect, useState } from "react";
+
+interface User {
+  user_id: string;
+  email: string;
+  name: string;
+  avatar_url: string;
+  authenticated: boolean;
+}
 
 export default function Navbar() {
   const { workspaces, currentWorkspace, setCurrentWorkspace, loading, error } =
     useWorkspace();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+        const response = await fetch(`${apiUrl}/users`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const userData = await response.json();
+        setUser(userData);
+      } catch (err) {
+        console.error(err);
+        // Handle error appropriately, maybe set an error state
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const handleLogout = async () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
@@ -134,19 +163,15 @@ export default function Navbar() {
                   className="flex items-center space-x-2 hover:bg-sage/5"
                 >
                   <Avatar className="w-8 h-8">
-                    <AvatarImage src="/placeholder.svg" alt="User" />
+                    <AvatarImage src={user?.avatar_url || "/placeholder.svg"} alt={user?.name || "User"} />
                     <AvatarFallback className="bg-gradient-to-br from-sage to-accent-orange text-cream text-sm">
-                      U
+                      {user && user.name ? user.name.charAt(0).toUpperCase() : "U"}
                     </AvatarFallback>
                   </Avatar>
                   <ChevronDown className="w-4 h-4 text-sage/60" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem>
-                  <User className="w-4 h-4 mr-2" />
-                  Profile
-                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Settings className="w-4 h-4 mr-2" />
                   Settings
