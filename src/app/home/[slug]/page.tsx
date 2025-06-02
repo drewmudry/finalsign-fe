@@ -261,10 +261,10 @@ export default function WorkspaceSettingsPage() {
 
       const response = await fetch(`${apiUrl}/workspaces/${slug}`, {
         method: "PUT",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(workspaceSettings),
       });
 

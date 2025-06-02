@@ -28,8 +28,9 @@ import { useWorkspace } from "@/contexts/WorkspaceContext";
 import NotificationDropdown from "@/components/NotificationDropdown";
 import { useEffect, useState } from "react";
 
+// Fixed interface to match your API response
 interface User {
-  user_id: string;
+  user_id: number; // Changed from string to number
   email: string;
   name: string;
   avatar_url: string;
@@ -40,21 +41,28 @@ export default function Navbar() {
   const { workspaces, currentWorkspace, setCurrentWorkspace, loading, error } =
     useWorkspace();
   const [user, setUser] = useState<User | null>(null);
+  const [userLoading, setUserLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        setUserLoading(true);
         const apiUrl =
           process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-        const response = await fetch(`${apiUrl}/user`);
+        const response = await fetch(`${apiUrl}/user`, {
+          credentials: "include",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
         const userData = await response.json();
+        console.log("User data received:", userData); // Debug log
         setUser(userData);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch user:", err);
         // Handle error appropriately, maybe set an error state
+      } finally {
+        setUserLoading(false);
       }
     };
 
@@ -76,6 +84,9 @@ export default function Navbar() {
   // Check if current user can manage workspace settings
   const canManageWorkspace =
     currentWorkspace?.role === "owner" || currentWorkspace?.role === "admin";
+
+  // Debug: Log user state
+  console.log("Current user state:", user);
 
   return (
     <header className="bg-white border-b border-sage/10 shadow-sm">
@@ -157,41 +168,52 @@ export default function Navbar() {
             <NotificationDropdown />
 
             {/* User Menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="flex items-center space-x-2 hover:bg-sage/5"
-                >
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage
-                      src={user?.avatar_url || "/placeholder.svg"}
-                      alt={user?.name || "User"}
-                    />
-                    <AvatarFallback className="bg-gradient-to-br from-sage to-accent-orange text-cream text-sm">
-                      {user && user.name
-                        ? user.name.charAt(0).toUpperCase()
-                        : "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <ChevronDown className="w-4 h-4 text-sage/60" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem>
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={handleLogout}
-                  className="text-red-600"
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {userLoading ? (
+              <div className="flex items-center space-x-2">
+                <Loader2 className="w-4 h-4 animate-spin text-sage" />
+              </div>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center space-x-2 hover:bg-sage/5"
+                  >
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage
+                        src={user?.avatar_url}
+                        alt={user?.name || "User"}
+                      />
+                      <AvatarFallback className="bg-gradient-to-br from-sage to-accent-orange text-cream text-sm">
+                        {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <ChevronDown className="w-4 h-4 text-sage/60" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <div className="px-2 py-1.5 text-sm font-medium">
+                    {user?.name}
+                  </div>
+                  <div className="px-2 py-1.5 text-xs text-sage/60">
+                    {user?.email}
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Settings className="w-4 h-4 mr-2" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="text-red-600"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
         </div>
       </div>
