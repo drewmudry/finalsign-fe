@@ -44,8 +44,9 @@ export default function Navbar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-        const response = await fetch(`${apiUrl}/users`);
+        const apiUrl =
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+        const response = await fetch(`${apiUrl}/user`);
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
@@ -163,9 +164,14 @@ export default function Navbar() {
                   className="flex items-center space-x-2 hover:bg-sage/5"
                 >
                   <Avatar className="w-8 h-8">
-                    <AvatarImage src={user?.avatar_url || "/placeholder.svg"} alt={user?.name || "User"} />
+                    <AvatarImage
+                      src={user?.avatar_url || "/placeholder.svg"}
+                      alt={user?.name || "User"}
+                    />
                     <AvatarFallback className="bg-gradient-to-br from-sage to-accent-orange text-cream text-sm">
-                      {user && user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                      {user && user.name
+                        ? user.name.charAt(0).toUpperCase()
+                        : "U"}
                     </AvatarFallback>
                   </Avatar>
                   <ChevronDown className="w-4 h-4 text-sage/60" />
