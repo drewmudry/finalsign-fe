@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useWorkspace } from "@/contexts/WorkspaceContext";
+import NotificationDropdown from "@/components/NotificationDropdown";
 
 export default function Navbar() {
   const { workspaces, currentWorkspace, setCurrentWorkspace, loading, error } =
@@ -120,8 +121,12 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* User Menu */}
-          <div className="flex items-center space-x-4">
+          {/* Right side: Notifications and User Menu */}
+          <div className="flex items-center space-x-2">
+            {/* Notification Bell */}
+            <NotificationDropdown />
+
+            {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
