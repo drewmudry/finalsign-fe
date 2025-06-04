@@ -1,4 +1,5 @@
 "use client";
+import TemplatesList from "@/components/templates/TemplatesList";
 import { Button } from "@/components/ui/button";
 import { useWorkspace } from "@/contexts/WorkspaceContext";
 
@@ -17,7 +18,7 @@ export default function HomePage() {
                 Welcome to Nexus
               </h1>
             </div>
-
+            <TemplatesList />
             {/* Quick Actions */}
             <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-6 bg-gradient-to-br from-sage/5 to-accent-orange/5 rounded-lg border border-sage/10">
