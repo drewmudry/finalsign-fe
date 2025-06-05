@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+import { supabase } from "@/lib/supabase";
 
 export function CTA() {
   const [name, setName] = useState("");
@@ -23,27 +22,24 @@ export function CTA() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/waitlist`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, phone }),
-      });
+      console.log("Submitting to Supabase:", { name, email, phone });
 
-      if (response.ok) {
-        setIsSuccess(true);
-        setSubmitMessage("Successfully joined the waitlist!");
-        setName("");
-        setEmail("");
-        setPhone("");
-      } else {
-        const errorData = await response.json();
-        setSubmitMessage(
-          errorData.message || "Failed to join the waitlist. Please try again."
-        );
+      const { error } = await supabase
+        .from("waitlists")
+        .insert([{ name, email, phone }]);
+
+      console.log("Supabase response error:", error);
+
+      if (error) {
+        console.error("Supabase error details:", error);
+        throw error;
       }
+
+      setIsSuccess(true);
+      setSubmitMessage("Successfully joined the waitlist!");
+      setName("");
+      setEmail("");
+      setPhone("");
     } catch (error) {
       console.error("Waitlist submission error:", error);
       setSubmitMessage("An unexpected error occurred. Please try again.");
