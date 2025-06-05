@@ -9,15 +9,10 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-cream">
       {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="container px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Welcome Section */}
           <div className="bg-white rounded-lg shadow-sm border border-sage/10 p-8">
-            <div className="text-center">
-              <h1 className="text-3xl font-bold text-sage mb-2">
-                Welcome to Nexus
-              </h1>
-            </div>
             <TemplatesList />
             {/* Quick Actions */}
             <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
