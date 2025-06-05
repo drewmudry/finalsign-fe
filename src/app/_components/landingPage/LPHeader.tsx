@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Zap } from "lucide-react";
+import Image from "next/image";
 
 export function LPHeader() {
   return (
@@ -9,7 +9,15 @@ export function LPHeader() {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
             <div className="w-8 h-8 bg-gradient-to-br from-sage to-accent-orange rounded-lg flex items-center justify-center">
-              <Zap className="w-5 h-5 text-cream" />
+              <Image
+                width={100}
+                height={100}
+                src="/fs_logo.svg"
+                alt="Logo"
+                className="w-5 h-5"
+                style={{ filter: "brightness(0) invert(1)" }}
+                unoptimized
+              />
             </div>
             <span className="ml-2 text-xl font-semibold text-sage">
               FinalSign
