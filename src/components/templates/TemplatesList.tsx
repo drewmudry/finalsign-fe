@@ -275,7 +275,7 @@ export default function TemplatesList() {
                   </div>
                 </CardContent>
                 <CardFooter className="pt-0 text-xs text-muted-foreground flex justify-between">
-                  <span>By {template.creator_name}</span>
+                  <Badge>{template.creator_name}</Badge>
                   <span>Updated {formatDate(template.updated_at)}</span>
                 </CardFooter>
               </Card>
